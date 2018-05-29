@@ -13,15 +13,15 @@ import tensorflow as tf
 from sklearn import metrics
 
 from cnn_model import TCNNConfig, TextCNN
-from data.cnews_loader import read_vocab, read_category, batch_iter, process_file, build_vocab
+from cnews_loader import read_vocab, read_category, batch_iter, process_file, build_vocab
 
-base_dir = 'data/cnews'
+base_dir = '/home/wu/文档/modeling/Scope_data/CNN_RNN/data/cnews'
 train_dir = os.path.join(base_dir, 'cnews.train.txt')
 test_dir = os.path.join(base_dir, 'cnews.test.txt')
 val_dir = os.path.join(base_dir, 'cnews.val.txt')
 vocab_dir = os.path.join(base_dir, 'cnews.vocab.txt')
 
-save_dir = 'checkpoints/textcnn'
+save_dir = '/home/wu/文档/modeling/Scope_data/CNN_RNN/checkpoints/textcnn'
 save_path = os.path.join(save_dir, 'best_validation')  # 最佳验证结果保存路径
 
 
@@ -60,7 +60,7 @@ def evaluate(sess, x_, y_):
 def train():
     print("Configuring TensorBoard and Saver...")
     # 配置 Tensorboard，重新训练时，请将tensorboard文件夹删除，不然图会覆盖
-    tensorboard_dir = 'tensorboard/textcnn'
+    tensorboard_dir = '/home/wu/文档/modeling/Scope_data/CNN_RNN/tensorboard/textcnn'
     if not os.path.exists(tensorboard_dir):
         os.makedirs(tensorboard_dir)
 
