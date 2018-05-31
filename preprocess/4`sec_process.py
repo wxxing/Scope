@@ -31,9 +31,9 @@ def save_file(dirname):
     dirname: 原数据目录
     文件内容格式:  类别\t内容
     """
-    f_train = io.open('/home/wu/PycharmProjects/Scope2/cnews.train.txt', 'w', encoding='utf-8')
-    f_test = io.open('/home/wu/PycharmProjects/Scope2/cnews.test.txt', 'w', encoding='utf-8')
-    f_val = io.open('/home/wu/PycharmProjects/Scope2/cnews.val.txt', 'w', encoding='utf-8')
+    f_train = io.open('/home/wu/文档/modeling/Scope_data/cnews.train.txt', 'w', encoding='utf-8')
+    f_test = io.open('/home/wu/文档/modeling/Scope_data/cnews.test.txt', 'w', encoding='utf-8')
+    f_val = io.open('/home/wu/文档/modeling/Scope_data/cnews.val.txt', 'w', encoding='utf-8')
     for cur_file in os.listdir(dirname):   # 分类目录
         filename = os.path.join(dirname, cur_file)
         print(filename)
@@ -54,7 +54,7 @@ def save_file(dirname):
 
 
 if __name__ == '__main__':
-    save_file('/home/wu/PycharmProjects/Scope2/data')
-    print(len(io.open('cnews.train.txt', 'r', encoding='utf-8').readlines()))
-    print(len(io.open('cnews.test.txt', 'r', encoding='utf-8').readlines()))
-    print(len(io.open('cnews.val.txt', 'r', encoding='utf-8').readlines()))
+    # save_file('/home/wu/PycharmProjects/Scope2/data')
+    print(len(io.open('/home/wu/文档/modeling/Scope_data/CNN_RNN/data/cnews/cnews.train.txt', 'r', encoding='utf-8').readlines()))
+    print(len(io.open('/home/wu/文档/modeling/Scope_data/CNN_RNN/data/cnews/cnews.test.txt', 'r', encoding='utf-8').readlines()))
+    print(len(io.open('/home/wu/文档/modeling/Scope_data/CNN_RNN/data/cnews/cnews.val.txt', 'r', encoding='utf-8').readlines()))
