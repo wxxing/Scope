@@ -11,17 +11,18 @@ from datetime import timedelta
 import numpy as np
 import tensorflow as tf
 from sklearn import metrics
+import matplotlib.pyplot as plt
 
 from cnn_model import TCNNConfig, TextCNN
 from cnews_loader import read_vocab, read_category, batch_iter, process_file, build_vocab
 
-base_dir = '/home/wu/文档/modeling/Scope_data/CNN_RNN/data/cnews'
+base_dir = '/home/wu/文档/modeling/Scope_data/CNN_RNN/data/cnews/'
 train_dir = os.path.join(base_dir, 'cnews.train.txt')
 test_dir = os.path.join(base_dir, 'cnews.test.txt')
 val_dir = os.path.join(base_dir, 'cnews.val.txt')
 vocab_dir = os.path.join(base_dir, 'cnews.vocab.txt')
 
-save_dir = '/home/wu/文档/modeling/Scope_data/CNN_RNN/checkpoints/textcnn'
+save_dir = '/home/wu/文档/modeling/Scope_data/CNN_RNN/checkpoints/textcnn/'
 save_path = os.path.join(save_dir, 'best_validation')  # 最佳验证结果保存路径
 
 
@@ -94,7 +95,10 @@ def train():
     last_improved = 0  # 记录上一次提升批次
     require_improvement = 1000  # 如果超过1000轮未提升，提前结束训练
 
+    train_scores = []
+    test_scores = []
     flag = False
+
     for epoch in range(config.num_epochs):
         print('Epoch:', epoch + 1)
         batch_train = batch_iter(x_train, y_train, config.batch_size)
@@ -125,6 +129,8 @@ def train():
                 msg = 'Iter: {0:>6}, Train Loss: {1:>6.2}, Train Acc: {2:>7.2%},' \
                       + ' Val Loss: {3:>6.2}, Val Acc: {4:>7.2%}, Time: {5} {6}'
                 print(msg.format(total_batch, loss_train, acc_train, loss_val, acc_val, time_dif, improved_str))
+                train_scores.append(acc_val)
+                test_scores.append(loss_val)
 
             session.run(model.optim, feed_dict=feed_dict)  # 运行优化
             total_batch += 1
@@ -136,6 +142,7 @@ def train():
                 break  # 跳出循环
         if flag:  # 同上
             break
+    return train_scores,test_scores
 
 
 def test():
@@ -195,5 +202,22 @@ if __name__ == '__main__':
     model = TextCNN(config)
 
     # if sys.argv[1] == 'train':
-    # train()
-    test()
+    train_scores, test_scores = train()
+    fig=plt.figure()
+    ax = fig.add_subplot(1, 2, 1)
+    ax.plot(range(7 * config.num_epochs), train_scores, label="accuracy ", marker='+')
+    ax.set_title(" accuracy ")
+    ax.set_xlabel(r"r")
+    ax.set_ylabel("score")
+    ax.set_ylim(0, 1.05)
+    ax.legend(loc="best", framealpha=0.5)
+    ax = fig.add_subplot(1, 2, 2)
+    ax.plot(range(7 * config.num_epochs), test_scores, label=" loss ", marker='o')
+    ax.set_title(" loss ")
+    ax.set_xlabel(r"r")
+    ax.set_ylabel("score")
+    ax.set_ylim(0, 1.05)
+    ax.legend(loc="best", framealpha=0.5)
+    plt.show()
+
+    # test()
